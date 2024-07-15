@@ -1,8 +1,22 @@
 # React + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+// Description //
+* This is a replication of telegram application which is responsive to desktop amd mobile devices created using ReactJS.
+* Styling is done using react-bootstrap, bootstrap, material UI and CSS.
+* Responsive behaviour isachieved using a isMobile state passed to all components as props.
+* For infinite page scrolling, react-infinite-scroller library from npm has been utilized.
+* Axios is used for api calling as it directly parses the JSON into desired object format.
+* Moment.js is used to format date and time
+* Due to small application size state management is done using props without any prop drilling
+* Material UI is used for adding icons and to create the Drawer Component.
 
-Currently, two official plugins are available:
+// Run the application //
+1. npm install
+2. npm run dev
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Application will run on port 5173 locally.
+
+
+
+
+
