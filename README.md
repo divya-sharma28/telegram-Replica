@@ -16,7 +16,7 @@
 
 Application will run on port 5173 locally.
 
-
-
+// Live application URL //
+https://divya-sharma28.github.io/telegram-replica/
 
 
