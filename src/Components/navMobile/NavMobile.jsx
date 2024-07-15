@@ -5,9 +5,11 @@ import ArrowBackOutlinedIcon from '@mui/icons-material/ArrowBackOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import Avatar from '@mui/material/Avatar';
+import { useGlobalContext } from '../../context/AppContext';
 import "./NavMobile.css"
-const NavMobile = ({ userChats, setUserChats, setOpenDrawer}) => {
+const NavMobile = () => {
 
+  const { userChats, setUserChats, setOpenDrawer}=useGlobalContext()
   const data = userChats.find((val) => val.sender.id !== 1)
 
   return (

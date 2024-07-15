@@ -8,9 +8,11 @@ import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import MoreVertOutlinedIcon from '@mui/icons-material/MoreVertOutlined';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import moment from 'moment';
+import { useGlobalContext } from '../../context/AppContext';
 
-const Conversation = ({ userChats, isMobile }) => {
+const Conversation = () => {
   
+  const { userChats, isMobile, isDarkMode } = useGlobalContext()
   const data = userChats.find((val) => val.sender.id !== 1)
 
   const renderChatDay = (chat, index, chats) => {
@@ -24,9 +26,9 @@ const Conversation = ({ userChats, isMobile }) => {
   };
 
   return (
-    <div className={`conversation ${!isMobile && "vh-100"} position-relative`}>
+    <div className={`${isDarkMode?"conversation-dark": "conversation"} ${!isMobile && "vh-100"} position-relative`}>
 
-      {!isMobile && userChats && userChats.length > 0 && <div className='bg-white p-3 convoDesktopHeader'>
+      {!isMobile && userChats && userChats.length > 0 && <div className={`${isDarkMode? "darkShade2 text-white":"bg-white"} p-3 convoDesktopHeader`}>
       <div className='d-flex align-items-center justify-content-between'>
           <div className='d-flex gap-2 align-items-center font-14 fw-semibold'>
             
@@ -35,7 +37,7 @@ const Conversation = ({ userChats, isMobile }) => {
 
           </div>
 
-          <div className='d-flex gap-3 text-secondary font-15'>
+          <div className='d-flex gap-3 text-gray font-15'>
             <SearchOutlinedIcon/>
             <PhoneOutlinedIcon />
             <MoreVertOutlinedIcon />
@@ -44,15 +46,15 @@ const Conversation = ({ userChats, isMobile }) => {
       </div>}
       {userChats && userChats.length > 0 ? (
         <>
-          <div className={`convo-box w-100 d-flex flex-column p-2 ${isMobile? "mobileHeight" :"desktopHeight"}`}>
+          <div className={`convo-box scroller-d w-100 d-flex flex-column p-2 ${isMobile? "mobileHeight" :"desktopHeight"}`}>
             {userChats.map((chat, index) => (
               <React.Fragment key={index}>
                 {renderChatDay(chat, index, userChats)}
-                <div className={`bubble flex-column pb-1 mb-1 ${chat.sender.id === 1 ? "right align-self-end" : "left align-self-start"} font-14`}>
+                <div className={`bubble flex-column pb-1 mb-1 ${chat.sender.id === 1 ? `right ${isDarkMode && "tele-color text-white"}  align-self-end` : `left ${isDarkMode && "darkShade3 text-white"} align-self-start`} font-14`}>
                   <p className='mb-0'>{chat.message}</p>
-                  <p className='text-end mb-0 font-12 text-secondary align-self-end ps-3 mt-2'>
+                  <p className='text-end mb-0 font-12 text-gray align-self-end ps-3 mt-2'>
                     {moment(chat.created_at).format('hh:mm')}
-                  {chat.sender.id === 1 ?  <DoneAllOutlinedIcon fontSize='20' className='ms-2 text-success'/>: ""}
+                  {chat.sender.id === 1 ?  <DoneAllOutlinedIcon fontSize='20' className={`ms-2 ${isDarkMode ? "text-white":"text-success"}`}/>: ""}
                   </p>
                   
                 </div>
@@ -60,11 +62,11 @@ const Conversation = ({ userChats, isMobile }) => {
             ))}
           </div>
 
-          <div className='bg-white d-flex px-3 py-2 gap-3 border-secondary border border-0 border-start'>
-            <AttachFileOutlinedIcon className='text-secondary cursor-pointer' />
-            <input type="text" placeholder='Write a message...' className='messageInput font-14' />
-            <SentimentSatisfiedOutlinedIcon className='text-secondary cursor-pointer' />
-            <KeyboardVoiceOutlinedIcon className='text-secondary cursor-pointer' />
+          <div className={`${isDarkMode ? "darkShade3":"bg-white"} d-flex px-3 py-2 gap-3 border-secondary border border-0 border-start`}>
+            <AttachFileOutlinedIcon className='text-gray cursor-pointer' />
+            <input type="text" placeholder='Write a message...' className={`messageInput font-14 ${isDarkMode ? "darkShade3 text-white":"bg-white"}`} />
+            <SentimentSatisfiedOutlinedIcon className='text-gray cursor-pointer' />
+            <KeyboardVoiceOutlinedIcon className='text-gray cursor-pointer' />
           </div>
         </>
       ) : (

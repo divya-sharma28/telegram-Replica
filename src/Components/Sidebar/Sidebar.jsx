@@ -7,19 +7,22 @@ import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
 import moment from 'moment/moment';
 import DoneAllOutlinedIcon from '@mui/icons-material/DoneAllOutlined';
+import EditIcon from '@mui/icons-material/Edit';
+import { Fab } from '@mui/material';
+import { useGlobalContext } from '../../context/AppContext';
 
 
-const Sidebar = ({setUserChats, isMobile,setOpenDrawer, openDrawer}) => {
+const Sidebar = () => {
+
+  const {setUserChats, isMobile,toggleDrawer, isDarkMode} = useGlobalContext()
   const [allChats, setAllChats] = useState([]);
   const [lastMessages, setLastMessages] = useState({});
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [avatarColor, setAvatarColor] = useState("orange");
   const [lastSenderId, setLastSenderId] = useState({});
-  
-  const toggleDrawer = (newOpen) => () => {
-    setOpenDrawer(newOpen);
-  };
+  const [activeChat, setActiveChat] = useState(null)
+
 
   const getAllChats = async (pageNumber) => {
     try {
@@ -56,6 +59,7 @@ const Sidebar = ({setUserChats, isMobile,setOpenDrawer, openDrawer}) => {
 
   const chatIdFunc = (id) => {
     getUserChats(id);
+    setActiveChat(id)
   };
 
   const getUserChats = async (id) => {
@@ -86,13 +90,16 @@ const Sidebar = ({setUserChats, isMobile,setOpenDrawer, openDrawer}) => {
   };
 
   return (
-    <div className='ps-1 py-1 sidebar'>
+    <div className={`ps-1 py-1 sidebar position-relative ${isDarkMode?"darkShade2 text-white":""}`}>
+      {isMobile && <Fab  aria-label="edit" className="position-fixed editBtn text-white" style={{bottom:"20px", right:"20px"}}>
+        <EditIcon />
+      </Fab>}
      {!isMobile && <div className='d-flex align-items-center gap-3 px-2'>
         <MenuIcon onClick={toggleDrawer(true)} className='menubar' />
-        <input type="text" placeholder='Search' className='searchInput font-13' />
+        <input type="text" placeholder='Search' className={`searchInput font-13 ${isDarkMode?"darkShade3 text-white":"seach-bg"}`}  />
       </div>}
 
-      <div className={`sideChats ${isMobile ? "mt-1": ""}`}>
+      <div className={`sideChats ${isDarkMode? "scroller-d" : "scroller-l"} ${isMobile ? "mt-1": ""}`}>
         <InfiniteScroll
           pageStart={0}
           loadMore={loadFunc}
@@ -100,7 +107,7 @@ const Sidebar = ({setUserChats, isMobile,setOpenDrawer, openDrawer}) => {
           loader={<div className="loader" key={0}></div>}
         >
           {allChats && allChats.map((data, index) => (
-            <div className={`d-flex gap-3 px-2 chats  ${isMobile ? "pt-3" : "py-3"}`} key={index} onClick={() => chatIdFunc(data.id)}>
+            <div className={`d-flex gap-3 px-2 cursor-pointer ${isDarkMode? "chat-dark":"chat-light"} ${activeChat === data.id &&(isDarkMode? "tele-color text-white" : "bg-blue text-white")} ${isMobile ? "pt-3" : "py-3"}`} key={index} onClick={() => chatIdFunc(data.id)}>
               <div>
                 <Avatar
                   alt={data.creator.name}
@@ -111,12 +118,12 @@ const Sidebar = ({setUserChats, isMobile,setOpenDrawer, openDrawer}) => {
               <div className={`w-100`}>
                 <div className='d-flex justify-content-between'>
                   <h6 className='mb-0 font-15'>{data.creator.name ? data.creator.name : "Unknown"}</h6>
-                  <span className='font-12 text-secondary'>
-                    {lastSenderId[data.id] === 1 && <DoneAllOutlinedIcon className='text-success font-15 mx-1'/>}
+                  <span className={`font-12 ${activeChat === data.id ?"text-white":"text-gray"}`}>
+                    {lastSenderId[data.id] === 1 && <DoneAllOutlinedIcon className={`${activeChat === data.id ?  "text-white" : "text-success"} ${isDarkMode?"tele-text" : "text-success"} font-15 mx-1`}/>}
                     {formatDate(data.updated_at)}
                     </span>
                 </div>
-                <p className='mb-0 font-12 mt-1 text-secondary'>{lastMessages && lastMessages[data.id] ? lastMessages[data.id].slice(0,isMobile?45:55) : 'Loading'}...</p> 
+                <p className={`mb-0 font-12 mt-1 ${activeChat === data.id ? "text-white" : "text-gray"}`}>{lastMessages && lastMessages[data.id] ? lastMessages[data.id].slice(0,isMobile?45:55) : 'Loading'}...</p> 
                {isMobile && <hr className='mb-0 pb-0' />}
               </div>
             </div>
@@ -124,7 +131,7 @@ const Sidebar = ({setUserChats, isMobile,setOpenDrawer, openDrawer}) => {
         </InfiniteScroll>
       </div>
 
-      <SideDrawer toggleDrawer={toggleDrawer} openDrawer={openDrawer} />
+      <SideDrawer />
     </div>
   );
 };
