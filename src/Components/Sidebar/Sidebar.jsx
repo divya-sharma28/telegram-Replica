@@ -96,7 +96,7 @@ const Sidebar = () => {
       </Fab>}
      {!isMobile && <div className='d-flex align-items-center gap-3 px-2'>
         <MenuIcon onClick={toggleDrawer(true)} className='menubar' />
-        <input type="text" placeholder='Search' className={`searchInput font-13 ${isDarkMode?"darkShade3 text-white":"seach-bg"}`}  />
+        <input type="text" placeholder='Search' className={`searchInput font-13 ${isDarkMode?"darkShade3 text-white":"search-bg"}`}  />
       </div>}
 
       <div className={`sideChats ${isDarkMode? "scroller-d" : "scroller-l"} ${isMobile ? "mt-1": ""}`}>
